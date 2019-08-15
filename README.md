@@ -75,7 +75,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <br/>
 = Protoboard
 <br/>
-= Sensor RFID RC522
+= Sensor Mifare MFRC522 (NXP RC522), a.k.a. RFID-RC522
 <br/>
 = Cartes RFID para testar (riocardo, crachá de identificação, etc...)
 <br/>
@@ -200,3 +200,21 @@ sudo service cron restart
 ```
 <br/>
 <br/>
+
+## PROBLEMAS ENCONTRADOS:
+06/08 - Criado arquivo INO. Antes não foi encontrado código contemplando comunicação com sensor via WPAN LE.
+<br/>
+<br/>
+
+## Próximos passos
+= Conversão serial BLE  > TEXT PLAN (ESTUDAR DOCUMENTAÇÃO DOS FABRICANTES)
+<br/>
+
+= Automação relé conforme perfis presentes no local - cód pronto!
+<br/>
+
+= Salva e apresentação dos dados na Nuvem.
+<br/>
+<br/>
+
+
