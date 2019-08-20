@@ -243,7 +243,11 @@ Quando a consulta retorna que nao há pessoas presentes na sala conforme esta ja
 
 ====
 
-Na camada de apresentação foi utilizado o software SIEM chamado SPLUNK na última versão estável (7.3.1), e a partir do mesmo é feita a navegação nos dados para mineração de dados, pois espera-se uma grande quantidade de dados alimentados frequentemnte pelos sensores e para fins de extração de relatórios quanto a presença de pessoas em classe.
+Na camada de apresentação foi utilizado o software SIEM chamado SPLUNK na última versão estável (7.3.1), e a partir do mesmo é feita a navegação nos dados para mineração de dados, pois espera-se uma grande quantidade de dados alimentados frequentemnte pelos sensores e para fins de extração de relatórios quanto a presença de pessoas em classe. 
+
+A comunicação com o banco MySQL depende do app DB CONNECT e o driver Mysql Connector Java, disponíveis na internet e pelo link na pasta Apps.
+
+A configuração das ferramentas acima bem como do acesso ao banco não foram contempladas nesta documentação pois fogem do escopo deste projeto, entretanto é possível monitorar os dados no banco e pela saída padrão na console do linux enquanto executar os shell scripts.
 
 
 
