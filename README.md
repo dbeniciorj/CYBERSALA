@@ -195,26 +195,55 @@ APÓS COPIAR SCRIPT E DAR PERMISSÃO DE EXECUÇÃO, AGENDAR EXECUÇÃO REGULAR D
 
 ```bash
 chmod +x /usr/local/bin/sensor.sh
-echo "*/2 * * * *   root    /usr/local/bin/sensor.sh" >> /etc/crontab
+echo "*/2 * * * *   root    /usr/local/bin/ttyACMx2DB.sh" >> /etc/crontab
+echo "* * * * *   root    /usr/local/bin/callHTTP_TurnOnOff.sh" >> /etc/crontab
 sudo service cron restart
 ```
 <br/>
 <br/>
 
-## PROBLEMAS ENCONTRADOS:
-06/08 - Criado arquivo INO. Antes não foi encontrado código contemplando comunicação com sensor via WPAN LE.
-<br/>
-<br/>
 
-## Próximos passos
-= Conversão serial BLE  > TEXT PLAN (ESTUDAR DOCUMENTAÇÃO DOS FABRICANTES)
-<br/>
+## ARQUITETURA EM CAMADAS E FUNCIONAMENTO 
 
-= Automação relé conforme perfis presentes no local - cód pronto!
-<br/>
+Na camada de sensoreamento foram utilizados dois objetos IoT:
 
-= Salva e apresentação dos dados na Nuvem.
-<br/>
-<br/>
+ - Sensor RFID: Sensor RC522 funcionando em um microcontrolador Arduino UNO, com a firmware RFID_SERIAL_LEDS_arduino.ino, é onde é marcada a presença a partir da apresentação de cartões ou tokens RFID (chamaremos tags RFID  para simplificar) .
+
+ - Atuador: Funcionando em um microcontrolador ESP32, com a firmware relay_http_8021x_esp32.ino, é onde é ligado ou desligado algum circuito elétrico que se deseja controlar (ex.: Projetor, Lâmpadas ou quaisquer equipamentos que funcionem sobre corrente nominal de até 10 amperes).
+
+OBS: A comunicação com o Sensor RFID deu-se por cabo serial, visto que os testes realizados sem fio ainda não haviam produzido resultado estável dentro do tempo disponível para esta experimentação.
+
+OBS2: A comunicação com o Atuador deu-se por protocolo 802.1x (wifi - ssid IOT pass 1234 para o teste), visto a necessidade de suporte TCP/IP para eficaz automação que possa ocorrer com diversos dispositivos.
+
+OBS3: A firmware sketch_clean_eeprom.ino foi utilizada nesta experimentação eventualmente para propósito de zerar a memória tanto do Arduino quanto do ESP32, a fim de garantir que a nova programação funcionasse corretamente.
+
+====
+
+Na camada de persistência utilizamos um banco MySQL, com duas tabelas, sendo
+
+ - cartao: tabela onde armazenamos os dados dos usuários identificados e seu perfil de acesso (professor, que terá um tempo de acesso de 6 minutos nesta demonstração, e aluno, com tempo de acesso de 2 minutos nesta demonstração)
+
+ - presenca: tabela onde armazenamos os registros de todas as marcações de tags RFID e o tempo em que foram registradas.
+
+
+OBS1: Para evitar ruído na comunicação do sensor RC522, foi criado um filtro que remove tags incompletas ou repetidas, repassando ao banco somente as novas marcações. Este filtro é realizado pelo Shell Script ttyACM2DB.sh que deve ser executado para comunicação entre o sensor e o banco. Além disso, quando é recebida qualquer leitura válida de RFID, é enviado uma solicitação para ligar o sensor após registro no banco .
+
+OBS2: Apesar de utilizarmos um banco relacional, todo o cruzamento de informações se dará na camada de apresentação
+
+====
+
+Na camada de automação utilizamos um Shell Script, callHTTP_TurnOnOff.sh, agendado no sistema para rodar a todo minuto, que consulta o banco de dados em busca de pessoas que estejam presentes na sala segundo tempo em que sua Tag foi registrada no banco conforme seu perfil de acesso:
+
+ - PROFESSORES: 6 MINUTOS
+
+ - ALUNOS: 2 MINUTOS
+
+Quando a consulta retorna que nao há pessoas presentes na sala conforme esta janela de tempo, o Atuador é acionado para desligar  os sistemas. Adicionalmente enquanto for computado alguma pessoa na sala neste janela de tempo é enviado uma solicitação para ligar o atuador a cada minuto.
+
+
+====
+
+Na camada de apresentação foi utilizado o software SIEM chamado SPLUNK na última versão estável (7.3.1), e a partir do mesmo é feita a navegação nos dados para mineração de dados, pois espera-se uma grande quantidade de dados alimentados frequentemnte pelos sensores e para fins de extração de relatórios quanto a presença de pessoas em classe.
+
 
 
