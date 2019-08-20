@@ -9,6 +9,7 @@ URLONTHING1="http://192.168.15.7/26/on"
 URLOFFTHING1="http://192.168.15.7/26/off"
 
 
+
 # READ DB
 PROFCOUNT=$(mysql -u $DB -b $DB -p$DBPWD -e "select count(timeStamp) from presenca where uid in (select uid from cartao where perf = 'professor') and timeStamp >= NOW() - INTERVAL $PROFTIME MINUTE ")
 

@@ -3,6 +3,10 @@ DB=iot
 DBPWD="1234"
 
 
+URLONTHING1="http://192.168.15.7/26/on"
+
+
+
 # COMUNICACAO SERIAL
 old=""
 uid="111"
@@ -35,6 +39,10 @@ while true; do
 				DATE=$(date "+%Y-%m-%d %H:%M:%S")
 			    # /opt/lampp/bin/mysql -s -u $DB -p$DBPWD -e "insert into $DB.presenca (timestamp,uid) values (\"$DATE\",\"$uid\")"
 				mysql -u $DB -b $DB -p$DBPWD -e "insert into presenca (timeStamp,uid) values (\"$DATE\",\"$uid\")"
+				
+				# TURN ON CASE
+				echo "CALL HTTP ON"
+				curl $URLONTHING1 > /dev/null
 
 				#/opt/lampp/bin/mysql -s -u $DB -p$DBPWD -e "insert into $DB.presenca (timestamp,uid) values (\"$(date "+%Y-%m-%d %H:%M:%S")\",\"$uid\")"
 				# UTC -3
