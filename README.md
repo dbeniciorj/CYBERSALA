@@ -213,7 +213,7 @@ Na camada de sensoreamento foram utilizados dois objetos IoT:
 
 OBS: A comunicação com o Sensor RFID deu-se por cabo serial, visto que os testes realizados sem fio ainda não haviam produzido resultado estável dentro do tempo disponível para esta experimentação.
 
-OBS2: A comunicação com o Atuador deu-se por protocolo 802.1x (wifi - ssid IOT pass 1234 para o teste), visto a necessidade de suporte TCP/IP para eficaz automação que possa ocorrer com diversos dispositivos.
+OBS2: A comunicação com o Atuador deu-se por protocolo 802.1x (wifi - ssid IOT / WPA2 PSK 12345678 para o teste), visto a necessidade de suporte TCP/IP para eficaz automação que possa ocorrer com diversos dispositivos.
 
 OBS3: A firmware sketch_clean_eeprom.ino foi utilizada nesta experimentação eventualmente para propósito de zerar a memória tanto do Arduino quanto do ESP32, a fim de garantir que a nova programação funcionasse corretamente.
 
